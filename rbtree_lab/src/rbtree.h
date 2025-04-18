@@ -20,6 +20,8 @@ typedef struct {
 
 rbtree *new_rbtree(void);
 void delete_rbtree(rbtree *);
+void rbtree_fix_up(rbtree *t, node_t *z);
+void delete_node(rbtree *t, node_t *node);
 
 node_t *rbtree_insert(rbtree *, const key_t);
 node_t *rbtree_find(const rbtree *, const key_t);
