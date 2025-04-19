@@ -202,17 +202,56 @@ void rbtree_fix_up(rbtree *t, node_t *z){
 
 node_t *rbtree_find(const rbtree *t, const key_t key) {
   // TODO: implement find
-  return t->root;
+  // 1. 예외처리
+  if(t == NULL || (t->root == t->nil)){
+    return NULL;
+  }
+
+  // 2. 탐색 로직(반복문)
+  node_t *current = t->root; 
+  while (current != t->nil)
+  {
+    if(key == (current->key)){
+      return current;
+    } else if (key < (current->key)){
+      current = current->left;
+    } else {
+      current = current->right;
+    }
+  }
+  return NULL;
 }
 
 node_t *rbtree_min(const rbtree *t) {
   // TODO: implement find
-  return t->root;
+    // 1. 예외처리
+  if(t == NULL || (t->root == t->nil)){
+    return NULL;
+  }
+
+  node_t *current = t->root;
+  while (current->left != t->nil)
+  {
+    current = current->left;
+  }
+  
+  return current;
 }
 
 node_t *rbtree_max(const rbtree *t) {
   // TODO: implement find
-  return t->root;
+    // 1. 예외처리
+  if(t == NULL || (t->root == t->nil)){
+    return NULL;
+  }
+
+  node_t *current = t->root;
+  while (current->right != t->nil)
+  {
+    current = current->right;
+  }
+  
+  return current;
 }
 
 int rbtree_erase(rbtree *t, node_t *p) {
