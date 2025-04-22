@@ -39,6 +39,23 @@ void test_insert_single(const key_t key)
   delete_rbtree(t);
 }
 
+void print_tree(const rbtree *t, node_t *node, int depth) {
+  if (node == t->nil) return;
+
+  // 우측 자식부터 먼저 출력 (오른쪽에 있는 노드가 위로 보이도록)
+  print_tree(t, node->right, depth + 1);
+
+  // 현재 노드 출력
+  for (int i = 0; i < depth; i++) {
+    // printf("    "); // 깊이에 따른 들여쓰기
+  }
+  // printf("%d(%s)\n", node->key, node->color == RBTREE_RED ? "R" : "B");
+
+  // 좌측 자식 출력
+  print_tree(t, node->left, depth + 1);
+}
+
+
 // find should return the node with the key or NULL if no such node exists
 void test_find_single(const key_t key, const key_t wrong_key)
 {
@@ -354,11 +371,15 @@ void test_find_erase(rbtree *t, const key_t *arr, const size_t n)
     node_t *p = rbtree_insert(t, arr[i]);
     assert(p != NULL);
   }
+  print_tree(t, t->root, 0);
 
   for (int i = 0; i < n; i++)
   {
     node_t *p = rbtree_find(t, arr[i]);
     // printf("arr[%d] = %d\n", i, arr[i]);
+    if (p == NULL) {
+      // printf("FAIL: rbtree_find(t, %d) returned NULL\n", arr[i]);
+    }
     assert(p != NULL);
     assert(p->key == arr[i]);
     rbtree_erase(t, p);
@@ -412,18 +433,21 @@ void test_find_erase_rand(const size_t n, const unsigned int seed)
   delete_rbtree(t);
 }
 
+
+
 int main(void)
-{
+{ 
+
   test_init();
   test_insert_single(1024);
   test_find_single(512, 1024);
-  // test_erase_root(128);
-  // test_find_erase_fixed();
-  // test_minmax_suite();
-  // test_to_array_suite();
-  // test_distinct_values();
-  // test_duplicate_values();
-  // test_multi_instance();
-  // test_find_erase_rand(10000, 17);
+  test_erase_root(128);
+  test_find_erase_fixed();
+  test_minmax_suite();
+  test_to_array_suite();
+  test_distinct_values();
+  test_duplicate_values();
+  test_multi_instance();
+  test_find_erase_rand(10000, 17);
   printf("Passed all tests!\n");
 }
